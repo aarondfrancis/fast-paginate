@@ -27,6 +27,9 @@ Builder::macro('deferredPaginate', function ($perPage = null, $columns = ['*'], 
         'values'  => $paginator->getCollection()->map->getRawOriginal($key)->toArray(),
         'boolean' => 'and',
     ];
+    
+    // To avoid any merging of columns we'll specify the table.
+    $this->query->select("{$table}.*");
 
     // Create a new paginator so that we can put our full records in,
     // not the ones that we modified to select only the primary key.
