@@ -1,0 +1,40 @@
+{
+  "name": "hammerstonedev/deferred-pagination-macro",
+  "description": "Deferred pagination macro for Laravel",
+  "keywords": [
+    "laravel",
+    "pagination"
+  ],
+  "homepage": "https://github.com/hammerstonedev/deferred-pagination-macro",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aaron Francis",
+      "email": "aaron@hammerstone.dev"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "illuminate/database": "^8.13 || ^9.0",
+    "illuminate/support": "^8.13 || ^9.0",
+    "illuminate/pagination": "^8.13 || ^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "LaravelMacro\\DeferredPagination\\": "src/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "preferred-install": "dist"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LaravelMacro\\DeferredPagination\\ServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
