@@ -21,13 +21,14 @@ class BuilderMixin
             // This is the copy of the query that becomes
             // the inner query that selects keys only.
             $paginator = $this->clone()
+                // Only select the primary key, we'll get the full
+                // records in a second query below.
+                ->select(["$table.$key"])
                 // We don't need eager loads for this cloned query, they'll
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
                 ->setEagerLoads([])
-                // Only select the primary key, we'll get the full
-                // records in a second query below.
-                ->paginate($perPage, ["$table.$key"], $pageName, $page);
+                ->paginate($perPage, ["*"], $pageName, $page);
 
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();

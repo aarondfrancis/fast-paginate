@@ -139,4 +139,25 @@ class BuilderTest extends BaseTest
         $this->assertTrue($results->first()->relationLoaded('posts'));
         $this->assertEquals(1, $results->first()->posts->count());
     }
+
+
+    /** @test */
+    public function selects_are_overwritten()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->selectRaw('(select 1 as complicated_subquery)')->fastPaginate();
+        });
+
+        // Dropped for our inner query
+        $this->assertEquals(
+            'select "users"."id" from "users" limit 15 offset 0',
+            $queries[1]['query']
+        );
+
+        // Restored for the user's query
+        $this->assertEquals(
+            'select (select 1 as complicated_subquery) from "users" where "users"."id" in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            $queries[2]['query']
+        );
+    }
 }
