@@ -28,7 +28,7 @@ class BuilderMixin
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
                 ->setEagerLoads([])
-                ->paginate($perPage, ["*"], $pageName, $page);
+                ->paginate($perPage, ['*'], $pageName, $page);
 
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();

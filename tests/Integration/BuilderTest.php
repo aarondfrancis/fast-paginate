@@ -140,7 +140,6 @@ class BuilderTest extends BaseTest
         $this->assertEquals(1, $results->first()->posts->count());
     }
 
-
     /** @test */
     public function selects_are_overwritten()
     {
