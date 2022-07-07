@@ -37,12 +37,12 @@ abstract class BaseTest extends TestCase
 
         for ($i = 1; $i < 30; $i++) {
             DB::table('users')->insert([[
-                'id' => $i,
+                'id'   => $i,
                 'name' => "Person $i",
             ]]);
 
             DB::table('posts')->insert([[
-                'name' => "Post $i",
+                'name'    => "Post $i",
                 'user_id' => $i,
             ]]);
         }

@@ -13,7 +13,7 @@ class FastPaginateProvider extends ServiceProvider
 {
     public function boot()
     {
-        Builder::mixin(new BuilderMixin);
-        Relation::mixin(new RelationMixin);
+        Builder::mixin(new BuilderMixin());
+        Relation::mixin(new RelationMixin());
     }
 }
