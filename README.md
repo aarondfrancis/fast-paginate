@@ -6,7 +6,7 @@ This is a fast `limit`/`offset` pagination macro for Laravel. It can be used in 
 
 This packages uses a SQL method similar to a "deferred join" to achieve this speedup. A deferred join is a technique that defers access to requested columns until _after_ the `offset` and `limit` have been applied.
 
-In our case we don't actually do a join, but rather a `where in` with a subquery. Using this technique we create an subquery that can be optimized with specific indexes for maximum speed and then use those results to fetch the full rows.
+In our case we don't actually do a join, but rather a `where in` with a subquery. Using this technique we create a subquery that can be optimized with specific indexes for maximum speed and then use those results to fetch the full rows.
 
 The SQL looks something like this:
 
