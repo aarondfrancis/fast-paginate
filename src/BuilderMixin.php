@@ -38,9 +38,9 @@ class BuilderMixin
             // we can't use that. We're sure that these values are safe because
             // they came directly from the database in the first place.
             $this->query->wheres[] = [
-                'type'    => 'InRaw',
-                'column'  => "$table.$key",
-                'values'  => $ids,
+                'type' => 'InRaw',
+                'column' => "$table.$key",
+                'values' => $ids,
                 'boolean' => 'and',
             ];
 
