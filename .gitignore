@@ -1,0 +1,12 @@
+/vendor
+/storage/framework/testing
+.env
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
+composer.lock
+bootstrap/cache/packages.php
+bootstrap/cache/services.php
+
+docs/*.blade.php
+docs/**/*.blade.php

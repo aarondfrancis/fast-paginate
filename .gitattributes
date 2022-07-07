@@ -1,0 +1,10 @@
+# Ignore all test and documentation with "export-ignore".
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/.github            export-ignore
+/phpunit.xml.dist   export-ignore
+/tests              export-ignore
+/docs               export-ignore
+/test               export-ignore
+/storage            export-ignore
+/bootstrap          export-ignore
