@@ -48,7 +48,7 @@ class BuilderMixin
             // we create a new paginator with all of the *stats* from the index-
             // only paginator, but the *items* from the outer query.
             return new LengthAwarePaginator(
-                $this->simplePaginate($paginator->perPage(), $columns, $pageName = null, 1)->items(),
+                $this->simplePaginate($perPage, $columns, $pageName = null, 1)->items(),
                 $paginator->total(),
                 $paginator->perPage(),
                 $paginator->currentPage(),

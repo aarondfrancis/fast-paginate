@@ -6,6 +6,10 @@
 namespace Hammerstone\Sidecar\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\User;
+use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
+use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
+use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
+use Illuminate\Database\QueryException;
 
 class BuilderTest extends BaseTest
 {
@@ -54,6 +58,45 @@ class BuilderTest extends BaseTest
             'select * from "users" where "users"."id" in (6, 7, 8, 9, 10) limit 6 offset 0',
             $queries[2]['query']
         );
+    }
+
+    /** @test */
+    public function pk_attribute_mutations_are_skipped()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = UserMutatedId::query()->fastPaginate(5);
+        });
+
+        $this->assertEquals(5, $results->count());
+
+        $this->assertEquals(
+            'select * from "users" where "users"."id" in (1, 2, 3, 4, 5) limit 6 offset 0',
+            $queries[2]['query']
+        );
+    }
+
+    /** @test */
+    public function custom_page_is_preserved()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = UserCustomPage::query()->fastPaginate();
+        });
+
+        $this->assertEquals(2, $results->count());
+
+        $this->assertEquals(
+            'select * from "users" where "users"."id" in (1, 2) limit 3 offset 0',
+            $queries[2]['query']
+        );
+    }
+
+    /** @test */
+    public function custom_table_is_preserved()
+    {
+        $this->expectException(QueryException::class);
+        $this->expectExceptionMessage('no such table: custom_table');
+
+        UserCustomTable::query()->fastPaginate();
     }
 
     /** @test */

@@ -17,7 +17,7 @@ class RelationMixin
                 $this->query->addSelect($this->shouldSelect($columns));
             }
 
-            return tap($this->query->deferredPaginate($perPage, $columns, $pageName, $page), function ($paginator) {
+            return tap($this->query->fastPaginate($perPage, $columns, $pageName, $page), function ($paginator) {
                 if ($this instanceof BelongsToMany) {
                     $this->hydratePivotRelation($paginator->items());
                 }
