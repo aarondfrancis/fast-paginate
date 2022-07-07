@@ -15,7 +15,7 @@ select * from contacts              -- The full data that you want to show your 
     where contacts.id in (          -- The "deferred join" or subquery, in our case.
         select id from contacts     -- The pagination, accessing as little data as possible - ID only.
         limit 15 offset 150000      
-    ) as tmp using(id)
+    )
 ```
 
 The benefits can vary based on your dataset, but this method allows the database to examine as little data as possible satisfy the user's intent.
