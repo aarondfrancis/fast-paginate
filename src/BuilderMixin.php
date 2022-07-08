@@ -13,7 +13,8 @@ class BuilderMixin
     public function fastPaginate()
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
-            /** @var $this Builder */
+            /** @var \Illuminate\Database\Eloquent\Builder $this */
+
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();
