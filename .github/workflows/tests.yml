@@ -11,12 +11,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     strategy:
       fail-fast: false
       matrix:
         php: [ 7.4, 8.0 ]
-        laravel: [8.*, 9.* ]
+        laravel: [ 8.*, 9.* ]
         dependency-version: [ prefer-lowest, prefer-stable ]
         include:
           - laravel: 8.*
@@ -50,7 +50,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer self-update ${{ matrix.composer-version }}
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
