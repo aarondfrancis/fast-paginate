@@ -6,7 +6,6 @@
 namespace Hammerstone\FastPaginate;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class BuilderMixin
