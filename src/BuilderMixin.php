@@ -5,7 +5,6 @@
 
 namespace Hammerstone\FastPaginate;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class BuilderMixin
@@ -14,7 +13,6 @@ class BuilderMixin
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Builder $this */
-
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();

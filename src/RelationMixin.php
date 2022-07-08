@@ -7,7 +7,6 @@ namespace Hammerstone\FastPaginate;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class RelationMixin
 {
@@ -15,7 +14,6 @@ class RelationMixin
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
-
             if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
                 $this->query->addSelect($this->shouldSelect($columns));
             }
