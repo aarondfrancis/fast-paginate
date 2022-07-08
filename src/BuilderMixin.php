@@ -5,16 +5,18 @@
 
 namespace Hammerstone\FastPaginate;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class BuilderMixin
 {
-    public function fastPaginate()
+    public function fastPaginate(): Closure
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
-            /** @var \Illuminate\Database\Eloquent\Builder $this */
+            /** @var \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $this */
 
+            /** @var \Illuminate\Database\Eloquent\Model $model */
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();
@@ -24,7 +26,7 @@ class BuilderMixin
             $paginator = $this->clone()
                 // Only select the primary key, we'll get the full
                 // records in a second query below.
-                ->select(["$table.$key"])
+                ->select(["{$table}.{$key}"])
                 // We don't need eager loads for this cloned query, they'll
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
@@ -41,7 +43,7 @@ class BuilderMixin
             // they came directly from the database in the first place.
             $this->query->wheres[] = [
                 'type' => 'InRaw',
-                'column' => "$table.$key",
+                'column' => "{$table}.{$key}",
                 'values' => $ids,
                 'boolean' => 'and',
             ];
@@ -50,7 +52,7 @@ class BuilderMixin
             // we create a new paginator with all of the *stats* from the index-
             // only paginator, but the *items* from the outer query.
             return new LengthAwarePaginator(
-                $this->simplePaginate($perPage, $columns, $pageName = null, 1)->items(),
+                $this->simplePaginate($perPage, $columns, $pageName, 1)->items(),
                 $paginator->total(),
                 $paginator->perPage(),
                 $paginator->currentPage(),

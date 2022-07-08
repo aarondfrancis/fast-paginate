@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 
 class FastPaginateProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         Builder::mixin(new BuilderMixin());
         Relation::mixin(new RelationMixin());

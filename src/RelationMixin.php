@@ -5,16 +5,17 @@
 
 namespace Hammerstone\FastPaginate;
 
+use Closure;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class RelationMixin
 {
-    public function fastPaginate()
+    public function fastPaginate(): Closure
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
-            /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
+            /** @var \Illuminate\Database\Eloquent\Relations\Relation<\Illuminate\Database\Eloquent\Model> $this */
 
             if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
                 $this->query->addSelect($this->shouldSelect($columns));

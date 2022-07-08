@@ -7,8 +7,8 @@ namespace Hammerstone\FastPaginate\Tests\Support;
  */
 class UserMutatedId extends User
 {
-    public function getIdAttribute($val)
+    public function getIdAttribute(string $val): string
     {
-        return "id:$val";
+        return "id:{$val}";
     }
 }

@@ -14,7 +14,7 @@ use Illuminate\Database\QueryException;
 class BuilderTest extends BaseTest
 {
     /** @test */
-    public function basic_test()
+    public function basic_test(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->fastPaginate();
@@ -31,7 +31,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function different_page_size()
+    public function different_page_size(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->fastPaginate(5);
@@ -46,7 +46,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function page_2()
+    public function page_2(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->fastPaginate(5, ['*'], 'page', 2);
@@ -61,7 +61,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function pk_attribute_mutations_are_skipped()
+    public function pk_attribute_mutations_are_skipped(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = UserMutatedId::query()->fastPaginate(5);
@@ -76,7 +76,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function custom_page_is_preserved()
+    public function custom_page_is_preserved(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = UserCustomPage::query()->fastPaginate();
@@ -91,7 +91,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function custom_table_is_preserved()
+    public function custom_table_is_preserved(): void
     {
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('no such table: custom_table');
@@ -100,7 +100,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function order_is_propagated()
+    public function order_is_propagated(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->orderBy('name')->fastPaginate(5);
@@ -113,7 +113,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function eager_loads_are_cleared_on_inner_query()
+    public function eager_loads_are_cleared_on_inner_query(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->with('posts')->fastPaginate(5);
@@ -130,7 +130,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function eager_loads_are_loaded_on_outer_query()
+    public function eager_loads_are_loaded_on_outer_query(): void
     {
         $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->with('posts')->fastPaginate();
@@ -141,7 +141,7 @@ class BuilderTest extends BaseTest
     }
 
     /** @test */
-    public function selects_are_overwritten()
+    public function selects_are_overwritten(): void
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
             $results = User::query()->selectRaw('(select 1 as complicated_subquery)')->fastPaginate();

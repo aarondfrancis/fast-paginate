@@ -48,7 +48,11 @@ abstract class BaseTest extends TestCase
         }
     }
 
-    public function withQueriesLogged($cb)
+    /**
+     * @param \Closure(): void  $cb
+     * @phpstan-return list<array{query: string, bindings: array<array-key, int|resource|string>, time: float|null}>
+     */
+    public function withQueriesLogged(callable $cb): array
     {
         DB::enableQueryLog();
         $cb();

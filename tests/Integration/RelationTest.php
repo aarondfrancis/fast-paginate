@@ -10,8 +10,9 @@ use Hammerstone\FastPaginate\Tests\Support\User;
 class RelationTest extends BaseTest
 {
     /** @test */
-    public function basic_test()
+    public function basic_test(): void
     {
+        /** @var \Hammerstone\FastPaginate\Tests\Support\User $user */
         $user = User::first();
         $queries = $this->withQueriesLogged(function () use ($user, &$results) {
             $results = $user->posts()->fastPaginate();
