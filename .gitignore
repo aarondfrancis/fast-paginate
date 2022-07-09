@@ -10,3 +10,4 @@ bootstrap/cache/services.php
 
 docs/*.blade.php
 docs/**/*.blade.php
+.idea/
