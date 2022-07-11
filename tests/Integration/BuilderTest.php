@@ -10,7 +10,6 @@ use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BuilderTest extends BaseTest
@@ -180,6 +179,4 @@ class BuilderTest extends BaseTest
             $queries[1]['query']
         );
     }
-
-
 }
