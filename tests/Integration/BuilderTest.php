@@ -10,12 +10,9 @@ use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BuilderTest extends BaseTest
 {
-    use RefreshDatabase;
-
     /** @test */
     public function basic_test()
     {
