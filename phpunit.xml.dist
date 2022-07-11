@@ -14,6 +14,9 @@
     </testsuite>
   </testsuites>
   <php>
-    <env name="DB_CONNECTION" value="testing"/>
+    <env name="DB_CONNECTION" value="mysql"/>
+    <env name="DB_DATABASE" value="fast_paginate"/>
+    <env name="DB_USERNAME" value="root"/>
+    <env name="DB_PASSWORD" value=""/>
   </php>
 </phpunit>

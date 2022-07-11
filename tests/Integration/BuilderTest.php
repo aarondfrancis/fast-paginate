@@ -10,9 +10,13 @@ use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BuilderTest extends BaseTest
 {
+    use RefreshDatabase;
+
     /** @test */
     public function basic_test()
     {
@@ -25,7 +29,7 @@ class BuilderTest extends BaseTest
         $this->assertCount(3, $queries);
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
             $queries[2]['query']
         );
     }
@@ -40,7 +44,7 @@ class BuilderTest extends BaseTest
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (1, 2, 3, 4, 5) limit 6 offset 0',
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5) limit 6 offset 0',
             $queries[2]['query']
         );
     }
@@ -55,7 +59,7 @@ class BuilderTest extends BaseTest
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (6, 7, 8, 9, 10) limit 6 offset 0',
+            'select * from `users` where `users`.`id` in (6, 7, 8, 9, 10) limit 6 offset 0',
             $queries[2]['query']
         );
     }
@@ -70,7 +74,7 @@ class BuilderTest extends BaseTest
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (1, 2, 3, 4, 5) limit 6 offset 0',
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5) limit 6 offset 0',
             $queries[2]['query']
         );
     }
@@ -85,7 +89,7 @@ class BuilderTest extends BaseTest
         $this->assertEquals(2, $results->count());
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (1, 2) limit 3 offset 0',
+            'select * from `users` where `users`.`id` in (1, 2) limit 3 offset 0',
             $queries[2]['query']
         );
     }
@@ -94,7 +98,7 @@ class BuilderTest extends BaseTest
     public function custom_table_is_preserved()
     {
         $this->expectException(QueryException::class);
-        $this->expectExceptionMessage('no such table: custom_table');
+        $this->expectExceptionMessage("Base table or view not found: 1146 Table 'fast_paginate.custom_table'");
 
         UserCustomTable::query()->fastPaginate();
     }
@@ -107,7 +111,7 @@ class BuilderTest extends BaseTest
         });
 
         $this->assertEquals(
-            'select * from "users" where "users"."id" in (1, 10, 11, 12, 13) order by "name" asc limit 6 offset 0',
+            'select * from `users` where `users`.`id` in (1, 10, 11, 12, 13) order by `name` asc limit 6 offset 0',
             $queries[2]['query']
         );
     }
@@ -124,7 +128,7 @@ class BuilderTest extends BaseTest
 
         // The eager load should come last, after the outer query has run.
         $this->assertEquals(
-            'select * from "posts" where "posts"."user_id" in (1, 2, 3, 4, 5)',
+            'select * from `posts` where `posts`.`user_id` in (1, 2, 3, 4, 5)',
             $queries[3]['query']
         );
     }
@@ -149,14 +153,33 @@ class BuilderTest extends BaseTest
 
         // Dropped for our inner query
         $this->assertEquals(
-            'select "users"."id" from "users" limit 15 offset 0',
+            'select `users`.`id` from `users` limit 15 offset 0',
             $queries[1]['query']
         );
 
         // Restored for the user's query
         $this->assertEquals(
-            'select (select 1 as complicated_subquery) from "users" where "users"."id" in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            'select (select 1 as complicated_subquery) from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
             $queries[2]['query']
         );
     }
+
+    /** @test */
+    public function havings_defer()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            User::query()
+                ->selectRaw('*, concat(name, id) as name_id')
+                ->having('name_id', '!=', '')
+                ->fastPaginate();
+        });
+
+        $this->assertCount(2, $queries);
+        $this->assertEquals(
+            'select *, concat(name, id) as name_id from `users` having `name_id` != ? limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+
 }

@@ -13,6 +13,13 @@ class BuilderMixin
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Builder $this */
+
+            // If there is a `having` clause then it relies on certain columns being present
+            // in the select, which we overwrite. In that case it's safest to just defer.
+            if (filled($this->getQuery()->havings)) {
+                return $this->paginate($perPage, $columns, $pageName, $page);
+            }
+
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();

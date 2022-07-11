@@ -24,6 +24,9 @@ abstract class BaseTest extends TestCase
     {
         parent::setUp();
 
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('posts');
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
