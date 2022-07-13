@@ -36,7 +36,7 @@ class BuilderMixin
 
             // Remove selecting all columns, and propagate on specific selects,
             // we'll get the full records in a second query below.
-            $paginatorColumns = collect($paginator->query->columns)
+            $paginatorColumns = collect($paginator->getQuery()->columns)
                 ->filter(fn($column) => $column !== "*")
                 ->push("$table.$key AS $keyColumn")
                 ->all();
