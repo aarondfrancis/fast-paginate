@@ -144,7 +144,7 @@ class BuilderTest extends BaseTest
     public function selects_are_overwritten()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::query()->select('*')->fastPaginate();
+            $results = User::query()->fastPaginate();
         });
 
         // Dropped for our inner query
@@ -174,6 +174,26 @@ class BuilderTest extends BaseTest
         $this->assertEquals(
             'select *, concat(name, id) as name_id from `users` having `name_id` != ? limit 15 offset 0',
             $queries[1]['query']
+        );
+    }
+
+    /** @test */
+    public function specific_selects_are_propagated()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->select('name')->fastPaginate();
+        });
+
+        // Dropped for our inner query
+        $this->assertEquals(
+            'select `name`, `users`.`id` as `fast_paginate_id` from `users` limit 15 offset 0',
+            $queries[1]['query']
+        );
+
+        // Restored for the user's query
+        $this->assertEquals(
+            'select `name` from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            $queries[2]['query']
         );
     }
 }

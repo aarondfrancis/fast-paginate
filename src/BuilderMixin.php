@@ -34,7 +34,7 @@ class BuilderMixin
 
             $keyColumn = "fast_paginate_$key";
 
-            // Remove selecting all columns, and forward on specific selects,
+            // Remove selecting all columns, and propagate on specific selects,
             // we'll get the full records in a second query below.
             $paginatorColumns = collect($paginator->query->columns)
                 ->filter(fn($column) => $column !== "*")
