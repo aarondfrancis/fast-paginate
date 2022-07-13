@@ -34,6 +34,8 @@ class BuilderMixin
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
                 ->setEagerLoads([])
+                ->withCount([])
+                ->reorder()
                 ->paginate($perPage, ['*'], $pageName, $page);
 
             // Get the key values from the records on the current page without mutating them.
