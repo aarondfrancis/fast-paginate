@@ -144,18 +144,18 @@ class BuilderTest extends BaseTest
     public function selects_are_overwritten()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::query()->selectRaw('(select 1 as complicated_subquery)')->fastPaginate();
+            $results = User::query()->select('*')->fastPaginate();
         });
 
         // Dropped for our inner query
         $this->assertEquals(
-            'select `users`.`id` from `users` limit 15 offset 0',
+            'select `users`.`id` as `fast_paginate_id` from `users` limit 15 offset 0',
             $queries[1]['query']
         );
 
         // Restored for the user's query
         $this->assertEquals(
-            'select (select 1 as complicated_subquery) from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
             $queries[2]['query']
         );
     }

@@ -27,19 +27,24 @@ class BuilderMixin
             // This is the copy of the query that becomes
             // the inner query that selects keys only.
             $paginator = $this->clone()
-                // Only select the primary key, we'll get the full
-                // records in a second query below.
-                ->select(["$table.$key"])
                 // We don't need eager loads for this cloned query, they'll
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
-                ->setEagerLoads([])
-                ->withCount([])
-                ->reorder()
-                ->paginate($perPage, ['*'], $pageName, $page);
+                ->setEagerLoads([]);
+
+            $keyColumn = "fast_paginate_$key";
+
+            // Remove selecting all columns, and forward on specific selects,
+            // we'll get the full records in a second query below.
+            $paginatorColumns = collect($paginator->query->columns)
+                ->filter(fn($column) => $column !== "*")
+                ->push("$table.$key AS $keyColumn")
+                ->all();
+
+            $paginator = $paginator->select($paginatorColumns)->paginate($perPage, ['*'], $pageName, $page);
 
             // Get the key values from the records on the current page without mutating them.
-            $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
+            $ids = $paginator->getCollection()->map->getRawOriginal($keyColumn)->toArray();
 
             // Add our values in directly using "raw" instead of adding new bindings.
             // This is basically the `whereIntegerInRaw` that Laravel uses in some
