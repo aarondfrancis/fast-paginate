@@ -176,4 +176,46 @@ class BuilderTest extends BaseTest
             $queries[1]['query']
         );
     }
+
+    /** @test */
+    public function standard_with_count_works()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            User::query()->withCount('posts')->orderByDesc('posts_count')->fastPaginate();
+        });
+
+        $this->assertCount(3, $queries);
+        $this->assertEquals(
+            'select `users`.`id`, (select count(*) from `posts` where `users`.`id` = `posts`.`user_id`) as `posts_count` from `users` order by `posts_count` desc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
+    public function aliased_with_count()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            User::query()->withCount('posts as posts_ct')->orderByDesc('posts_ct')->fastPaginate();
+        });
+
+        $this->assertCount(3, $queries);
+        $this->assertEquals(
+            'select `users`.`id`, (select count(*) from `posts` where `users`.`id` = `posts`.`user_id`) as `posts_ct` from `users` order by `posts_ct` desc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
+    public function unordered_with_count_is_ignored()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            User::query()->withCount('posts')->orderByDesc('id')->fastPaginate();
+        });
+
+        $this->assertCount(3, $queries);
+        $this->assertEquals(
+            'select `users`.`id` from `users` order by `id` desc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
 }

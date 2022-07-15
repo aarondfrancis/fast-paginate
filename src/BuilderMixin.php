@@ -5,7 +5,10 @@
 
 namespace Hammerstone\FastPaginate;
 
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class BuilderMixin
 {
@@ -14,9 +17,11 @@ class BuilderMixin
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Builder $this */
 
+            $base = $this->getQuery();
+
             // If there is a `having` clause then it relies on certain columns being present
             // in the select, which we overwrite. In that case it's safest to just defer.
-            if (filled($this->getQuery()->havings)) {
+            if (filled($base->havings)) {
                 return $this->paginate($perPage, $columns, $pageName, $page);
             }
 
@@ -24,12 +29,43 @@ class BuilderMixin
             $key = $model->getKeyName();
             $table = $model->getTable();
 
+            // Collect all of the `orders` off of the base query and pluck
+            // the column out. Based on what orders are present, we may
+            // have to include certain columns in the inner query.
+            $orders = collect($base->orders)
+                ->pluck('column')
+                ->map(function ($column) use ($base) {
+                    // Use the grammar to wrap them, so that our `str_contains`
+                    // (further down) doesn't return any false positives.
+                    return $base->grammar->wrap($column);
+                });
+
+            $innerSelectColumns = collect($base->columns)
+                ->filter(function ($column) use ($orders) {
+                    $column = $column instanceof Expression ? $column->getValue() : $column;
+
+                    foreach ($orders as $order) {
+                        // If we're ordering by this column, then we need to
+                        // keep it in the inner query.
+                        if (str_contains($column, "as $order")) {
+                            return true;
+                        }
+                    }
+
+                    // Otherwise we don't.
+                    return false;
+                })
+                ->prepend("$table.$key")
+                ->unique()
+                ->values()
+                ->toArray();
+
             // This is the copy of the query that becomes
             // the inner query that selects keys only.
             $paginator = $this->clone()
                 // Only select the primary key, we'll get the full
                 // records in a second query below.
-                ->select(["$table.$key"])
+                ->select($innerSelectColumns)
                 // We don't need eager loads for this cloned query, they'll
                 // remain on the query that actually gets the records.
                 // (withoutEagerLoads not available on Laravel 8.)
