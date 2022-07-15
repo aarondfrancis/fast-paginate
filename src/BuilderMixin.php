@@ -5,10 +5,8 @@
 
 namespace Hammerstone\FastPaginate;
 
-use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class BuilderMixin
 {
@@ -16,7 +14,6 @@ class BuilderMixin
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Builder $this */
-
             $base = $this->getQuery();
 
             // If there is a `having` clause then it relies on certain columns being present
