@@ -11,7 +11,6 @@ use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Str;
 
 class BuilderTest extends BaseTest
 {

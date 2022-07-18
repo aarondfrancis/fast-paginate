@@ -9,7 +9,6 @@ use Hammerstone\FastPaginate\FastPaginateProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
 
 abstract class BaseTest extends TestCase
@@ -27,7 +26,6 @@ abstract class BaseTest extends TestCase
 
         Schema::dropIfExists('users');
         Schema::dropIfExists('posts');
-
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
