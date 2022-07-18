@@ -72,17 +72,11 @@ class BuilderMixin
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
 
-            // Add our values in directly using "raw" instead of adding new bindings.
-            // This is basically the `whereIntegerInRaw` that Laravel uses in some
-            // places, but we're not guaranteed the primary keys are integers, so
-            // we can't use that. We're sure that these values are safe because
-            // they came directly from the database in the first place.
-            $this->query->wheres[] = [
-                'type' => 'InRaw',
-                'column' => "$table.$key",
-                'values' => $ids,
-                'boolean' => 'and',
-            ];
+            if ($model->getKeyType() === 'int') {
+                $this->query->whereIntegerInRaw("$table.$key", $ids);
+            } else {
+                $this->query->whereIn("$table.$key", $ids);
+            }
 
             // The $paginator is full of records that are primary keys only. Here,
             // we create a new paginator with all of the *stats* from the index-
