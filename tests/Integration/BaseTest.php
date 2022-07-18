@@ -51,6 +51,23 @@ abstract class BaseTest extends TestCase
         }
     }
 
+    protected function seedNotifications()
+    {
+        Schema::dropIfExists('notifications');
+
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('body');
+        });
+
+        for ($i = 1; $i < 30; $i++) {
+            DB::table('notifications')->insert([[
+                'id' => "64bf6df6-06d7-11ed-b939-000$i",
+                'body' => "Message $i",
+            ]]);
+        }
+    }
+
     public function withQueriesLogged($cb)
     {
         DB::enableQueryLog();

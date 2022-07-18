@@ -5,6 +5,7 @@
 
 namespace Hammerstone\Sidecar\Tests\Integration;
 
+use Hammerstone\FastPaginate\Tests\Support\Notification;
 use Hammerstone\FastPaginate\Tests\Support\User;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
@@ -217,5 +218,24 @@ class BuilderTest extends BaseTest
             'select `users`.`id` from `users` order by `id` desc limit 15 offset 0',
             $queries[1]['query']
         );
+    }
+
+    /** @test */
+    public function uuids_are_bound_correctly()
+    {
+        $this->seedNotifications();
+
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            Notification::query()->fastPaginate();
+        });
+
+        $this->assertCount(3, $queries);
+        $this->assertEquals(
+            'select * from `notifications` where `notifications`.`id` in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) limit 16 offset 0',
+            $queries[2]['query']
+        );
+
+        $this->assertCount(15, $queries[2]['bindings']);
+        $this->assertEquals('64bf6df6-06d7-11ed-b939-0001', $queries[2]['bindings'][0]);
     }
 }
