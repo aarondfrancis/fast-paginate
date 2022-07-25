@@ -16,9 +16,10 @@ class BuilderMixin
             /** @var \Illuminate\Database\Eloquent\Builder $this */
             $base = $this->getQuery();
 
-            // If there is a `having` clause then it relies on certain columns being present
-            // in the select, which we overwrite. In that case it's safest to just defer.
-            if (filled($base->havings)) {
+            // Havings and groups don't work well with this paradigm, because we are
+            // counting on each row of the inner query to return a primary key
+            // that we can use. When grouping, that's not always the case.
+            if (filled($base->havings) || filled($base->groups)) {
                 return $this->paginate($perPage, $columns, $pageName, $page);
             }
 

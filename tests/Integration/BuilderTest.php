@@ -11,6 +11,7 @@ use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class BuilderTest extends BaseTest
 {
@@ -237,5 +238,20 @@ class BuilderTest extends BaseTest
 
         $this->assertCount(15, $queries[2]['bindings']);
         $this->assertEquals('64bf6df6-06d7-11ed-b939-0001', $queries[2]['bindings'][0]);
+    }
+
+
+    /** @test */
+    public function groups_are_skipped()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            User::query()->select(['name',])->groupBy('name')->fastPaginate();
+        });
+
+        $this->assertCount(2, $queries);
+        $this->assertEquals(
+            'select `name` from `users` group by `name` limit 15 offset 0',
+            $queries[1]['query']
+        );
     }
 }
