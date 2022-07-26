@@ -15,4 +15,9 @@ class User extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class);
+    }
 }
