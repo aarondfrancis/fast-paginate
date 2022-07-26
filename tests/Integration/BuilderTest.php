@@ -5,7 +5,6 @@
 
 namespace Hammerstone\Sidecar\Tests\Integration;
 
-use Hammerstone\FastPaginate\Tests\Support\Notification;
 use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
 use Hammerstone\FastPaginate\Tests\Support\User;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;

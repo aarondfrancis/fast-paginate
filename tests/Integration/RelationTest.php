@@ -48,7 +48,7 @@ class RelationTest extends BaseTest
         $queries = $this->withQueriesLogged(function () use ($user) {
             $user->notifications()
                 ->orderBy('created_at')
-                ->addSelect("notification_user.created_at as pivot_created_at")
+                ->addSelect('notification_user.created_at as pivot_created_at')
                 ->fastPaginate();
         });
 
@@ -69,7 +69,7 @@ class RelationTest extends BaseTest
         $user = User::first();
         $queries = $this->withQueriesLogged(function () use ($user) {
             $user->notifications()
-                ->addSelect("notification_user.created_at as pivot_created_at")
+                ->addSelect('notification_user.created_at as pivot_created_at')
                 ->orderBy('pivot_created_at')
                 ->fastPaginate();
         });
@@ -94,7 +94,6 @@ class RelationTest extends BaseTest
                 ->withPivot('created_at')
                 ->orderBy('pivot_created_at')
                 ->fastPaginate();
-
         });
 
         $this->assertEquals(
