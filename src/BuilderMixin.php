@@ -40,13 +40,11 @@ class BuilderMixin
 
             $innerSelectColumns = collect($base->columns)
                 ->filter(function ($column) use ($orders, $base) {
-                    $column = $column instanceof Expression ? $column->getValue() : $column;
-
+                    $column = $column instanceof Expression ? $column->getValue() : $base->grammar->wrap($column);
                     foreach ($orders as $order) {
                         // If we're ordering by this column, then we need to
                         // keep it in the inner query.
-
-                        if (str_contains($base->grammar->wrap($column), "as $order")) {
+                        if (str_contains($column, "as $order")) {
                             return true;
                         }
                     }
