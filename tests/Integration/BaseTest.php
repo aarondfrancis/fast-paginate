@@ -74,7 +74,7 @@ abstract class BaseTest extends TestCase
         }
     }
 
-    protected function seedNotifications()
+    protected function seedStringNotifications()
     {
         Schema::dropIfExists('notifications');
 

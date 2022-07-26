@@ -6,6 +6,7 @@
 namespace Hammerstone\Sidecar\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\Notification;
+use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
 use Hammerstone\FastPaginate\Tests\Support\User;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
@@ -223,10 +224,10 @@ class BuilderTest extends BaseTest
     /** @test */
     public function uuids_are_bound_correctly()
     {
-        $this->seedNotifications();
+        $this->seedStringNotifications();
 
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            Notification::query()->fastPaginate();
+            NotificationStringKey::query()->fastPaginate();
         });
 
         $this->assertCount(3, $queries);
