@@ -26,6 +26,8 @@ abstract class BaseTest extends TestCase
 
         Schema::dropIfExists('users');
         Schema::dropIfExists('posts');
+        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('notification_user');
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -38,6 +40,17 @@ abstract class BaseTest extends TestCase
             $table->string('name');
         });
 
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->text('message');
+        });
+
+        Schema::create('notification_user', function (Blueprint $table) {
+            $table->unsignedBigInteger('notification_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+        });
+
         for ($i = 1; $i < 30; $i++) {
             DB::table('users')->insert([[
                 'id' => $i,
@@ -46,6 +59,16 @@ abstract class BaseTest extends TestCase
 
             DB::table('posts')->insert([[
                 'name' => "Post $i",
+                'user_id' => $i,
+            ]]);
+
+            DB::table('notifications')->insert([[
+                'id' => $i,
+                'message' => str_repeat('a', $i),
+            ]]);
+
+            DB::table('notification_user')->insert([[
+                'notification_id' => $i,
                 'user_id' => $i,
             ]]);
         }
