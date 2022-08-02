@@ -9,6 +9,7 @@ use Hammerstone\FastPaginate\FastPaginateProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 abstract class BaseTest extends TestCase
@@ -17,6 +18,7 @@ abstract class BaseTest extends TestCase
     {
         return [
             FastPaginateProvider::class,
+            ScoutServiceProvider::class
         ];
     }
 

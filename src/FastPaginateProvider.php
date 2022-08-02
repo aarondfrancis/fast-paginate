@@ -15,5 +15,9 @@ class FastPaginateProvider extends ServiceProvider
     {
         Builder::mixin(new BuilderMixin());
         Relation::mixin(new RelationMixin());
+
+        if (class_exists(\Laravel\Scout\Builder::class)) {
+            \Laravel\Scout\Builder::mixin(new ScoutMixin());
+        }
     }
 }
