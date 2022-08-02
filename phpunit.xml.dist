@@ -18,5 +18,6 @@
     <env name="DB_DATABASE" value="fast_paginate"/>
     <env name="DB_USERNAME" value="test"/>
     <env name="DB_PASSWORD" value="root"/>
+    <env name="SCOUT_DRIVER" value="collection"/>
   </php>
 </phpunit>
