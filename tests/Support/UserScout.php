@@ -18,5 +18,4 @@ class UserScout extends Model
     {
         return $this->toArray();
     }
-
 }

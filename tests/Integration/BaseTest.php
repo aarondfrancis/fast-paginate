@@ -18,7 +18,7 @@ abstract class BaseTest extends TestCase
     {
         return [
             FastPaginateProvider::class,
-            ScoutServiceProvider::class
+            ScoutServiceProvider::class,
         ];
     }
 
