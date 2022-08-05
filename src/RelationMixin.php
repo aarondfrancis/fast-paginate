@@ -25,4 +25,21 @@ class RelationMixin
             });
         };
     }
+
+    public function simpleFastPaginate()
+    {
+        return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
+            /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
+            if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
+                $this->query->addSelect($this->shouldSelect($columns));
+            }
+
+            return tap($this->query->simpleFastPaginate($perPage, $columns, $pageName, $page), function ($paginator) {
+                if ($this instanceof BelongsToMany) {
+                    $this->hydratePivotRelation($paginator->items());
+                }
+            });
+        };
+    }
+
 }
