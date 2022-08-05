@@ -5,13 +5,10 @@
 
 namespace Hammerstone\FastPaginate;
 
-use Illuminate\Pagination\Paginator;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Pagination\LengthAwarePaginator;
-
 class BuilderMixin
 {
-    public function simpleFastPaginate() {
+    public function simpleFastPaginate()
+    {
         return (new FastPaginate())->simpleFastPaginate();
     }
 

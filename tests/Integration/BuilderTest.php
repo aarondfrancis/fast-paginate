@@ -5,14 +5,14 @@
 
 namespace Hammerstone\Sidecar\Tests\Integration;
 
-use Illuminate\Pagination\Paginator;
-use Illuminate\Database\QueryException;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
 use Hammerstone\FastPaginate\Tests\Support\User;
-use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
-use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
+use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
+use Illuminate\Database\QueryException;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class BuilderTest extends BaseTest
 {
@@ -292,8 +292,6 @@ class BuilderTest extends BaseTest
         );
     }
 
-    
-
     /** @test */
     public function basic_simple_test_from_relation()
     {
@@ -311,5 +309,4 @@ class BuilderTest extends BaseTest
             $queries[2]['query']
         );
     }
-
 }

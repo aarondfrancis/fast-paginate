@@ -6,11 +6,8 @@
 namespace Hammerstone\FastPaginate;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class FastPaginate
 {
@@ -25,7 +22,6 @@ class FastPaginate
                 $paginator->getOptions()
             );
         });
-
     }
 
     public function simpleFastPaginate()
@@ -132,6 +128,4 @@ class FastPaginate
             ->values()
             ->toArray();
     }
-
-
 }
