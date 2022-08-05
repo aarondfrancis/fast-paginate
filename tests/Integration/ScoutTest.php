@@ -3,7 +3,7 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\Sidecar\Tests\Integration;
+namespace Hammerstone\FastPaginate\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\UserScout;
 
