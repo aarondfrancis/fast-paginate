@@ -5,12 +5,14 @@
 
 namespace Hammerstone\Sidecar\Tests\Integration;
 
-use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Database\QueryException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Hammerstone\FastPaginate\Tests\Support\User;
+use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
-use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
-use Illuminate\Database\QueryException;
+use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
 
 class BuilderTest extends BaseTest
 {
@@ -21,6 +23,7 @@ class BuilderTest extends BaseTest
             $results = User::query()->fastPaginate();
         });
 
+        $this->assertInstanceOf(LengthAwarePaginator::class, $results);
         $this->assertEquals(15, $results->count());
         $this->assertEquals('Person 15', $results->last()->name);
         $this->assertCount(3, $queries);
@@ -252,4 +255,61 @@ class BuilderTest extends BaseTest
             $queries[1]['query']
         );
     }
+
+    /** @test */
+    public function basic_simple_test()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->simpleFastPaginate();
+        });
+
+        $this->assertInstanceOf(Paginator::class, $results);
+        $this->assertEquals(15, $results->count());
+        $this->assertEquals('Person 15', $results->last()->name);
+        $this->assertCount(2, $queries);
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
+    public function basic_simple_test_page_two()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->simpleFastPaginate(5, ['*'], 'page', 2);
+        });
+
+        $this->assertInstanceOf(Paginator::class, $results);
+        $this->assertEquals(5, $results->count());
+        $this->assertEquals('Person 10', $results->last()->name);
+        $this->assertCount(2, $queries);
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (6, 7, 8, 9, 10) limit 6 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    
+
+    /** @test */
+    public function basic_simple_test_from_relation()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::first()->posts()->simpleFastPaginate();
+        });
+
+        $this->assertInstanceOf(Paginator::class, $results);
+        $this->assertEquals(1, $results->count());
+        $this->assertEquals('Post 1', $results->last()->name);
+        $this->assertCount(3, $queries);
+
+        $this->assertEquals(
+            'select * from `posts` where `posts`.`user_id` = ? and `posts`.`user_id` is not null and `posts`.`id` in (1) limit 16 offset 0',
+            $queries[2]['query']
+        );
+    }
+
 }
