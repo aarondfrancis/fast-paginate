@@ -16,6 +16,9 @@ use Illuminate\Pagination\Paginator;
 
 class BuilderTest extends BaseTest
 {
+    private const TOTAL_USERS = 29;
+    private const TOTAL_POSTS_FIRST_USER = 1 ;
+
     /** @test */
     public function basic_test()
     {
@@ -24,6 +27,7 @@ class BuilderTest extends BaseTest
         });
 
         $this->assertInstanceOf(LengthAwarePaginator::class, $results);
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
         $this->assertEquals(15, $results->count());
         $this->assertEquals('Person 15', $results->last()->name);
         $this->assertCount(3, $queries);
@@ -32,6 +36,10 @@ class BuilderTest extends BaseTest
             'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
             $queries[2]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
+        $this->assertEquals(self::TOTAL_USERS, $results->total());
     }
 
     /** @test */
@@ -41,12 +49,17 @@ class BuilderTest extends BaseTest
             $results = User::query()->fastPaginate(5);
         });
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
             'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5) limit 6 offset 0',
             $queries[2]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
+        $this->assertEquals(self::TOTAL_USERS, $results->total());
     }
 
     /** @test */
@@ -56,12 +69,17 @@ class BuilderTest extends BaseTest
             $results = User::query()->fastPaginate(5, ['*'], 'page', 2);
         });
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
             'select * from `users` where `users`.`id` in (6, 7, 8, 9, 10) limit 6 offset 0',
             $queries[2]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(2, $results->currentPage());
+        $this->assertEquals(self::TOTAL_USERS, $results->total());
     }
 
     /** @test */
@@ -71,6 +89,7 @@ class BuilderTest extends BaseTest
             $results = UserMutatedId::query()->fastPaginate(5);
         });
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
@@ -86,12 +105,17 @@ class BuilderTest extends BaseTest
             $results = UserCustomPage::query()->fastPaginate();
         });
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
         $this->assertEquals(2, $results->count());
 
         $this->assertEquals(
             'select * from `users` where `users`.`id` in (1, 2) limit 3 offset 0',
             $queries[2]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
+        $this->assertEquals(self::TOTAL_USERS, $results->total());
     }
 
     /** @test */
@@ -185,7 +209,7 @@ class BuilderTest extends BaseTest
     public function standard_with_count_works()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            User::query()->withCount('posts')->orderByDesc('posts_count')->fastPaginate();
+            $results = User::query()->withCount('posts')->orderByDesc('posts_count')->fastPaginate();
         });
 
         $this->assertCount(3, $queries);
@@ -193,6 +217,11 @@ class BuilderTest extends BaseTest
             'select `users`.`id`, (select count(*) from `posts` where `users`.`id` = `posts`.`user_id`) as `posts_count` from `users` order by `posts_count` desc limit 15 offset 0',
             $queries[1]['query']
         );
+
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
+        $this->assertEquals(self::TOTAL_USERS, $results->total());
     }
 
     /** @test */
@@ -263,6 +292,7 @@ class BuilderTest extends BaseTest
             $results = User::query()->simpleFastPaginate();
         });
 
+        /** @var \Illuminate\Pagination\Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(15, $results->count());
         $this->assertEquals('Person 15', $results->last()->name);
@@ -272,6 +302,9 @@ class BuilderTest extends BaseTest
             'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
             $queries[1]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
     }
 
     /** @test */
@@ -281,6 +314,7 @@ class BuilderTest extends BaseTest
             $results = User::query()->simpleFastPaginate(5, ['*'], 'page', 2);
         });
 
+        /** @var \Illuminate\Pagination\Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(5, $results->count());
         $this->assertEquals('Person 10', $results->last()->name);
@@ -290,6 +324,9 @@ class BuilderTest extends BaseTest
             'select * from `users` where `users`.`id` in (6, 7, 8, 9, 10) limit 6 offset 0',
             $queries[1]['query']
         );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(2, $results->currentPage());
     }
 
     /** @test */
@@ -299,6 +336,7 @@ class BuilderTest extends BaseTest
             $results = User::first()->posts()->simpleFastPaginate();
         });
 
+        /** @var \Illuminate\Pagination\Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(1, $results->count());
         $this->assertEquals('Post 1', $results->last()->name);
@@ -308,5 +346,8 @@ class BuilderTest extends BaseTest
             'select * from `posts` where `posts`.`user_id` = ? and `posts`.`user_id` is not null and `posts`.`id` in (1) limit 16 offset 0',
             $queries[2]['query']
         );
+
+        $this->assertFalse($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
     }
 }

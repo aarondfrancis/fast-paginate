@@ -32,7 +32,7 @@ class FastPaginate
                 $paginator->perPage(),
                 $paginator->currentPage(),
                 $paginator->getOptions()
-            );
+            )->hasMorePagesWhen($paginator->hasMorePages());
         });
     }
 
