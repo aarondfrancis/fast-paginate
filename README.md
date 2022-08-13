@@ -4,7 +4,7 @@
 
 This is a fast `limit`/`offset` pagination macro for Laravel. It can be used in place of the standard `paginate` methods. 
 
-This packages uses a SQL method similar to a "deferred join" to achieve this speedup. A deferred join is a technique that defers access to requested columns until _after_ the `offset` and `limit` have been applied.
+This package uses a SQL method similar to a "deferred join" to achieve this speedup. A deferred join is a technique that defers access to requested columns until _after_ the `offset` and `limit` have been applied.
 
 In our case we don't actually do a join, but rather a `where in` with a subquery. Using this technique we create a subquery that can be optimized with specific indexes for maximum speed and then use those results to fetch the full rows.
 
@@ -21,7 +21,7 @@ select * from contacts              -- The full data that you want to show your 
 > You might get an error trying to run the query above! Something like `This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery.`
 > In this package, we run them as [two _separate_ queries](https://github.com/hammerstonedev/fast-paginate/blob/154da286f8160a9e75e64e8025b0da682aa2ba23/src/BuilderMixin.php#L62-L79) to get around that!  
 
-The benefits can vary based on your dataset, but this method allows the database to examine as little data as possible satisfy the user's intent.
+The benefits can vary based on your dataset, but this method allows the database to examine as little data as possible to satisfy the user's intent.
 
 It's unlikely that this method will ever perform worse than traditional `offset` / `limit`, although it is possible, so be
 sure to test on your data!
