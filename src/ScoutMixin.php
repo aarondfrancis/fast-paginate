@@ -11,7 +11,7 @@ class ScoutMixin
     {
         return function ($perPage = null, $pageName = 'page', $page = null) {
             // Just defer to the Scout Builder for DX purposes.
-            $this->paginate($perPage, $pageName, $page);
+            return $this->paginate($perPage, $pageName, $page);
         };
     }
 }
