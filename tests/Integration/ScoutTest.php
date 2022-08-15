@@ -13,8 +13,10 @@ class ScoutTest extends BaseTest
     public function basic_scout_test()
     {
         $queries = $this->withQueriesLogged(function () {
-            UserScout::search('Person')->paginate();
-            UserScout::search('Person')->fastPaginate();
+            $results1 = UserScout::search('Person')->paginate();
+            $results2 = UserScout::search('Person')->fastPaginate();
+
+            $this->assertEquals($results1->count(), $results2->count());
         });
 
         $this->assertEquals(
