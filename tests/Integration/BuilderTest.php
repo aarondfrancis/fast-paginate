@@ -17,7 +17,8 @@ use Illuminate\Pagination\Paginator;
 class BuilderTest extends BaseTest
 {
     private const TOTAL_USERS = 29;
-    private const TOTAL_POSTS_FIRST_USER = 1 ;
+
+    private const TOTAL_POSTS_FIRST_USER = 1;
 
     /** @test */
     public function basic_test()
