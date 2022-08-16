@@ -40,7 +40,7 @@ abstract class BaseTest extends TestCase
 
         Schema::create('users_uuid_primary', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('parent_id')->nullable();
+            $table->foreignUuid('parent_id')->nullable();
             $table->string('name');
             $table->timestamps();
         });
