@@ -24,7 +24,7 @@ class FastPaginate
         });
     }
 
-    public function simpleFastPaginate()
+    public function fastSimplePaginate()
     {
         return $this->paginate('simplePaginate', function (array $items, $paginator) {
             return $this->simplePaginator(

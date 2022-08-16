@@ -26,7 +26,7 @@ class RelationMixin
         };
     }
 
-    public function simpleFastPaginate()
+    public function fastSimplePaginate()
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
             /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
@@ -34,11 +34,20 @@ class RelationMixin
                 $this->query->addSelect($this->shouldSelect($columns));
             }
 
-            return tap($this->query->simpleFastPaginate($perPage, $columns, $pageName, $page), function ($paginator) {
+            return tap($this->query->fastSimplePaginate($perPage, $columns, $pageName, $page), function ($paginator) {
                 if ($this instanceof BelongsToMany) {
                     $this->hydratePivotRelation($paginator->items());
                 }
             });
         };
     }
+
+    /**
+     * @deprecated deprecated, use fastSimplePaginate
+     */
+    public function simpleFastPaginate()
+    {
+        return $this->fastSimplePaginate();
+    }
+
 }

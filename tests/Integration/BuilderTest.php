@@ -290,7 +290,7 @@ class BuilderTest extends BaseTest
     public function basic_simple_test()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::query()->simpleFastPaginate();
+            $results = User::query()->fastSimplePaginate();
         });
 
         /** @var \Illuminate\Pagination\Paginator $results */
@@ -312,7 +312,7 @@ class BuilderTest extends BaseTest
     public function basic_simple_test_page_two()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::query()->simpleFastPaginate(5, ['*'], 'page', 2);
+            $results = User::query()->fastSimplePaginate(5, ['*'], 'page', 2);
         });
 
         /** @var \Illuminate\Pagination\Paginator $results */
@@ -334,7 +334,7 @@ class BuilderTest extends BaseTest
     public function basic_simple_test_from_relation()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::first()->posts()->simpleFastPaginate();
+            $results = User::first()->posts()->fastSimplePaginate();
         });
 
         /** @var \Illuminate\Pagination\Paginator $results */
@@ -351,4 +351,26 @@ class BuilderTest extends BaseTest
         $this->assertFalse($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
     }
+
+    public function alias_for_simple_test()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->simpleFastPaginate();
+        });
+
+        /** @var \Illuminate\Pagination\Paginator $results */
+        $this->assertInstanceOf(Paginator::class, $results);
+        $this->assertEquals(15, $results->count());
+        $this->assertEquals('Person 15', $results->last()->name);
+        $this->assertCount(2, $queries);
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) limit 16 offset 0',
+            $queries[1]['query']
+        );
+
+        $this->assertTrue($results->hasMorePages());
+        $this->assertEquals(1, $results->currentPage());
+    }
+
 }
