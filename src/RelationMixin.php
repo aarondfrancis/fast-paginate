@@ -49,5 +49,4 @@ class RelationMixin
     {
         return $this->fastSimplePaginate();
     }
-
 }

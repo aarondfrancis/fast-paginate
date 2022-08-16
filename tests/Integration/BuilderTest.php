@@ -372,5 +372,4 @@ class BuilderTest extends BaseTest
         $this->assertTrue($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
     }
-
 }
