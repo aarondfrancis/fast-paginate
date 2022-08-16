@@ -10,6 +10,7 @@ use Hammerstone\FastPaginate\Tests\Support\User;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
+use Hammerstone\FastPaginate\Tests\Support\UserUuidKey;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -139,6 +140,26 @@ class BuilderTest extends BaseTest
             'select * from `users` where `users`.`id` in (1, 10, 11, 12, 13) order by `name` asc limit 6 offset 0',
             $queries[2]['query']
         );
+    }
+    
+    /** @test */
+    public function ordered_by_default()
+    {
+        $parent = UserUuidKey::create([
+            'name' => 'Parent',
+        ]);
+
+        collect()->range(1, 9)->each(function ($i) use ($parent) {
+            UserUuidKey::create([
+                'name' => "Child {$i}",
+                'parent_id' => $parent->id,
+            ]);
+        });
+
+        $resultsFastPaginated = collect(UserUuidKey::first()->children()->select('id')->fastPaginate()->items())->map->id;
+        $resultPaginated = collect(UserUuidKey::first()->children()->select('id')->paginate()->items())->map->id;
+        
+        $this->assertEquals($resultPaginated, $resultsFastPaginated);
     }
 
     /** @test */

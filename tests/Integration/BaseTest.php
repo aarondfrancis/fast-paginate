@@ -9,6 +9,7 @@ use Hammerstone\FastPaginate\FastPaginateProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase;
 
@@ -27,6 +28,7 @@ abstract class BaseTest extends TestCase
         parent::setUp();
 
         Schema::dropIfExists('users');
+        Schema::dropIfExists('users_uuid_primary');
         Schema::dropIfExists('posts');
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('notification_user');
@@ -34,6 +36,13 @@ abstract class BaseTest extends TestCase
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+        });
+
+        Schema::create('users_uuid_primary', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignId('parent_id')->nullable();
+            $table->string('name');
+            $table->timestamps();
         });
 
         Schema::create('posts', function (Blueprint $table) {
