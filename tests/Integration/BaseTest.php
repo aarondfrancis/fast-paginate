@@ -63,7 +63,7 @@ abstract class BaseTest extends TestCase
             DB::table('posts')->insert([[
                 'name' => "Post $i",
                 'user_id' => $i,
-                'views' => 1
+                'views' => 1,
             ]]);
 
             DB::table('notifications')->insert([[

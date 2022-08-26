@@ -93,6 +93,7 @@ class FastPaginate
     /**
      * @param $builder
      * @return array
+     *
      * @throws QueryIncompatibleWithFastPagination
      */
     public static function getInnerSelectColumns($builder)

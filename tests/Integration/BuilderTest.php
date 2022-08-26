@@ -360,7 +360,7 @@ class BuilderTest extends BaseTest
                 ->withSum([
                     'posts as views_count' => function ($query) {
                         $query->where('views', '>', 0);
-                    }
+                    },
                 ], 'views')
                 ->orderBy('views_count')
                 ->fastPaginate();
@@ -369,7 +369,7 @@ class BuilderTest extends BaseTest
                 ->withSum([
                     'posts as views_count' => function ($query) {
                         $query->where('views', '>', 0);
-                    }
+                    },
                 ], 'views')
                 ->orderBy('views_count')
                 ->paginate();

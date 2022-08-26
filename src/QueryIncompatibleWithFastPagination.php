@@ -7,5 +7,4 @@ namespace Hammerstone\FastPaginate;
 
 class QueryIncompatibleWithFastPagination extends \Exception
 {
-
 }
