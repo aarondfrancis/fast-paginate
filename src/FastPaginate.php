@@ -7,7 +7,6 @@ namespace Hammerstone\FastPaginate;
 
 use Closure;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Pagination\Paginator;
 
 class FastPaginate
 {
@@ -55,7 +54,11 @@ class FastPaginate
             $key = $model->getKeyName();
             $table = $model->getTable();
 
-            $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
+            try {
+                $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
+            } catch (QueryIncompatibleWithFastPagination $e) {
+                return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
+            }
 
             // This is the copy of the query that becomes
             // the inner query that selects keys only.
@@ -72,7 +75,7 @@ class FastPaginate
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
 
-            if ($model->getKeyType() === 'int') {
+            if (in_array($model->getKeyType(), ['int', 'integer'])) {
                 $this->query->whereIntegerInRaw("$table.$key", $ids);
             } else {
                 $this->query->whereIn("$table.$key", $ids);
@@ -90,6 +93,7 @@ class FastPaginate
     /**
      * @param $builder
      * @return array
+     * @throws QueryIncompatibleWithFastPagination
      */
     public static function getInnerSelectColumns($builder)
     {
@@ -122,6 +126,11 @@ class FastPaginate
 
                 // Otherwise we don't.
                 return false;
+            })
+            ->each(function ($column) {
+                if (str_contains($column, '?')) {
+                    throw new QueryIncompatibleWithFastPagination;
+                }
             })
             ->prepend("$table.$key")
             ->unique()

@@ -351,4 +351,38 @@ class BuilderTest extends BaseTest
         $this->assertFalse($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
     }
+
+    /** @test */
+    public function with_sum_has_the_correct_number_of_parameters()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$fast, &$regular) {
+            $fast = User::query()
+                ->withSum([
+                    'posts as views_count' => function ($query) {
+                        $query->where('views', '>', 0);
+                    }
+                ], 'views')
+                ->orderBy('views_count')
+                ->fastPaginate();
+
+            $regular = User::query()
+                ->withSum([
+                    'posts as views_count' => function ($query) {
+                        $query->where('views', '>', 0);
+                    }
+                ], 'views')
+                ->orderBy('views_count')
+                ->paginate();
+        });
+
+        $this->assertEquals($queries[0]['query'], $queries[2]['query']);
+        $this->assertEquals($queries[0]['bindings'], $queries[2]['bindings']);
+
+        $this->assertEquals($queries[1]['query'], $queries[3]['query']);
+        $this->assertEquals($queries[1]['bindings'], $queries[3]['bindings']);
+
+        $this->assertEquals($fast->toArray(), $regular->toArray());
+
+        $this->assertEquals(get_class($fast), get_class($regular));
+    }
 }
