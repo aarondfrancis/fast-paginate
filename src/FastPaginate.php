@@ -14,7 +14,7 @@ class FastPaginate
     {
         return $this->paginate('paginate', function (array $items, $paginator) {
             return $this->paginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->total(),
                 $paginator->perPage(),
                 $paginator->currentPage(),
@@ -27,7 +27,7 @@ class FastPaginate
     {
         return $this->paginate('simplePaginate', function (array $items, $paginator) {
             return $this->simplePaginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->perPage(),
                 $paginator->currentPage(),
                 $paginator->getOptions()
