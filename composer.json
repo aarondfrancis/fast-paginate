@@ -1,6 +1,6 @@
 {
     "name": "hammerstone/fast-paginate",
-    "description": "",
+    "description": "Fast paginate for Laravel",
     "type": "library",
     "license": "MIT",
     "authors": [
