@@ -116,7 +116,7 @@ class FastPaginate
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {
-                $column = $column instanceof Expression ? $column->getValue() : $base->grammar->wrap($column);
+                $column = $column instanceof Expression ? $column->getValue($base->grammar) : $base->grammar->wrap($column);
                 foreach ($orders as $order) {
                     // If we're ordering by this column, then we need to
                     // keep it in the inner query.
