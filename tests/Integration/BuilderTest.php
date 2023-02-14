@@ -14,7 +14,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
-class BuilderTest extends BaseTest
+class BuilderTest extends Base
 {
     private const TOTAL_USERS = 29;
 

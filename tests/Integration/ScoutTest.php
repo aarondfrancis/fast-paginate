@@ -7,7 +7,7 @@ namespace Hammerstone\FastPaginate\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\UserScout;
 
-class ScoutTest extends BaseTest
+class ScoutTest extends Base
 {
     /** @test */
     public function basic_scout_test()
