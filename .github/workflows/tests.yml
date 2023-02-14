@@ -37,6 +37,11 @@ jobs:
           - laravel: 8.*
             php: 8.1
             dependency-version: prefer-lowest
+
+          # PHP 8.2 requires Laravel 8.65, so skip lowest
+          - laravel: 8.*
+            php: 8.2
+            dependency-version: prefer-lowest
             
           - laravel: 9.*
             php: 7.4
