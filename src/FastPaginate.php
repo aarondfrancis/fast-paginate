@@ -128,7 +128,11 @@ class FastPaginate
                 // Otherwise we don't.
                 return false;
             })
-            ->each(function ($column) {
+            ->each(function ($column) use ($base) {
+                if ($column instanceof Expression) {
+                    $column = $column->getValue($base->grammar);
+                }
+
                 if (str_contains($column, '?')) {
                     throw new QueryIncompatibleWithFastPagination;
                 }
