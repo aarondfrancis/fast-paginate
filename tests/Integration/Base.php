@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase;
 
-abstract class BaseTest extends TestCase
+abstract class Base extends TestCase
 {
     protected function getPackageProviders($app)
     {
