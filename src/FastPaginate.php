@@ -54,6 +54,14 @@ class FastPaginate
             $key = $model->getKeyName();
             $table = $model->getTable();
 
+            // Apparently some databases allow for offset 0 with no limit and some people
+            // use it as a hack to get all records. Since that defeats the purpose of
+            // fast pagination, we'll just return the normal paginator in that case.
+            // https://github.com/hammerstonedev/fast-paginate/issues/39
+            if ($perPage === -1) {
+                return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
+            }
+
             try {
                 $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
             } catch (QueryIncompatibleWithFastPagination $e) {
