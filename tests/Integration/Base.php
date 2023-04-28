@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase;
 
-abstract class BaseTest extends TestCase
+abstract class Base extends TestCase
 {
     protected function getPackageProviders($app)
     {
@@ -25,6 +25,10 @@ abstract class BaseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        if (method_exists($this, 'withoutDeprecationHandling')) {
+            $this->withoutDeprecationHandling();
+        }
 
         Schema::dropIfExists('users');
         Schema::dropIfExists('posts');

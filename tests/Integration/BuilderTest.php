@@ -14,7 +14,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
-class BuilderTest extends BaseTest
+class BuilderTest extends Base
 {
     private const TOTAL_USERS = 29;
 
@@ -137,6 +137,19 @@ class BuilderTest extends BaseTest
 
         $this->assertEquals(
             'select * from `users` where `users`.`id` in (1, 10, 11, 12, 13) order by `name` asc limit 6 offset 0',
+            $queries[2]['query']
+        );
+    }
+
+    /** @test */
+    public function order_by_raw_is_propagated()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->orderByRaw('id % 2')->orderBy('id')->fastPaginate(5);
+        });
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (2, 4, 6, 8, 10) order by id % 2, `id` asc limit 6 offset 0',
             $queries[2]['query']
         );
     }

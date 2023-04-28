@@ -91,7 +91,6 @@ class FastPaginate
     }
 
     /**
-     * @param $builder
      * @return array
      *
      * @throws QueryIncompatibleWithFastPagination
@@ -108,6 +107,7 @@ class FastPaginate
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
             ->pluck('column')
+            ->filter()
             ->map(function ($column) use ($base) {
                 // Use the grammar to wrap them, so that our `str_contains`
                 // (further down) doesn't return any false positives.
@@ -116,7 +116,7 @@ class FastPaginate
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {
-                $column = $column instanceof Expression ? $column->getValue() : $base->grammar->wrap($column);
+                $column = $column instanceof Expression ? $column->getValue($base->grammar) : $base->grammar->wrap($column);
                 foreach ($orders as $order) {
                     // If we're ordering by this column, then we need to
                     // keep it in the inner query.
@@ -128,7 +128,11 @@ class FastPaginate
                 // Otherwise we don't.
                 return false;
             })
-            ->each(function ($column) {
+            ->each(function ($column) use ($base) {
+                if ($column instanceof Expression) {
+                    $column = $column->getValue($base->grammar);
+                }
+
                 if (str_contains($column, '?')) {
                     throw new QueryIncompatibleWithFastPagination;
                 }

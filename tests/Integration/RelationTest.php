@@ -7,7 +7,7 @@ namespace Hammerstone\FastPaginate\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\User;
 
-class RelationTest extends BaseTest
+class RelationTest extends Base
 {
     /** @test */
     public function basic_test()

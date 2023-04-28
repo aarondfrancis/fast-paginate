@@ -1,6 +1,6 @@
 {
     "name": "hammerstone/fast-paginate",
-    "description": "",
+    "description": "Fast paginate for Laravel",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -11,10 +11,10 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/database": "^8.37|^9.0"
+        "illuminate/database": "^8.37|^9.0|^10.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6|^7",
+        "orchestra/testbench": "^6|^7|^8.0",
         "mockery/mockery": "^1.3.3",
         "phpunit/phpunit": ">=8.5.23|^9",
         "laravel/scout": "^9.4"
