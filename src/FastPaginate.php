@@ -107,6 +107,7 @@ class FastPaginate
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
             ->pluck('column')
+            ->filter()
             ->map(function ($column) use ($base) {
                 // Use the grammar to wrap them, so that our `str_contains`
                 // (further down) doesn't return any false positives.
