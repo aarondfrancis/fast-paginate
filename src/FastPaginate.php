@@ -108,7 +108,7 @@ class FastPaginate
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
             ->map(function ($column) use ($base) {
-                if (isset($column['type']) && $column['type']=='Raw') {
+                if (isset($column['type']) && $column['type'] == 'Raw') {
                     return $base->grammar->wrap($column['sql']);
                 }
 
