@@ -14,7 +14,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
-class BuilderTest extends BaseTest
+class BuilderTest extends Base
 {
     private const TOTAL_USERS = 29;
 
@@ -137,6 +137,19 @@ class BuilderTest extends BaseTest
 
         $this->assertEquals(
             'select * from `users` where `users`.`id` in (1, 10, 11, 12, 13) order by `name` asc limit 6 offset 0',
+            $queries[2]['query']
+        );
+    }
+
+    /** @test */
+    public function order_by_raw_is_propagated()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->orderByRaw('id % 2')->orderBy('id')->fastPaginate(5);
+        });
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (2, 4, 6, 8, 10) order by id % 2, `id` asc limit 6 offset 0',
             $queries[2]['query']
         );
     }
@@ -350,5 +363,39 @@ class BuilderTest extends BaseTest
 
         $this->assertFalse($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
+    }
+
+    /** @test */
+    public function with_sum_has_the_correct_number_of_parameters()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$fast, &$regular) {
+            $fast = User::query()
+                ->withSum([
+                    'posts as views_count' => function ($query) {
+                        $query->where('views', '>', 0);
+                    },
+                ], 'views')
+                ->orderBy('views_count')
+                ->fastPaginate();
+
+            $regular = User::query()
+                ->withSum([
+                    'posts as views_count' => function ($query) {
+                        $query->where('views', '>', 0);
+                    },
+                ], 'views')
+                ->orderBy('views_count')
+                ->paginate();
+        });
+
+        $this->assertEquals($queries[0]['query'], $queries[2]['query']);
+        $this->assertEquals($queries[0]['bindings'], $queries[2]['bindings']);
+
+        $this->assertEquals($queries[1]['query'], $queries[3]['query']);
+        $this->assertEquals($queries[1]['bindings'], $queries[3]['bindings']);
+
+        $this->assertEquals($fast->toArray(), $regular->toArray());
+
+        $this->assertEquals(get_class($fast), get_class($regular));
     }
 }

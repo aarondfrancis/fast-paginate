@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase;
 
-abstract class BaseTest extends TestCase
+abstract class Base extends TestCase
 {
     protected function getPackageProviders($app)
     {
@@ -42,6 +42,7 @@ abstract class BaseTest extends TestCase
             $table->id();
             $table->integer('user_id');
             $table->string('name');
+            $table->integer('views');
         });
 
         Schema::create('notifications', function (Blueprint $table) {
@@ -64,6 +65,7 @@ abstract class BaseTest extends TestCase
             DB::table('posts')->insert([[
                 'name' => "Post $i",
                 'user_id' => $i,
+                'views' => 1,
             ]]);
 
             DB::table('notifications')->insert([[

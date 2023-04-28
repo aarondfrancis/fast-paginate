@@ -7,7 +7,6 @@ namespace Hammerstone\FastPaginate;
 
 use Closure;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Pagination\Paginator;
 
 class FastPaginate
 {
@@ -55,7 +54,11 @@ class FastPaginate
             $key = $model->getKeyName();
             $table = $model->getTable();
 
-            $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
+            try {
+                $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
+            } catch (QueryIncompatibleWithFastPagination $e) {
+                return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
+            }
 
             // This is the copy of the query that becomes
             // the inner query that selects keys only.
@@ -72,7 +75,7 @@ class FastPaginate
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
 
-            if ($model->getKeyType() === 'int') {
+            if (in_array($model->getKeyType(), ['int', 'integer'])) {
                 $this->query->whereIntegerInRaw("$table.$key", $ids);
             } else {
                 $this->query->whereIn("$table.$key", $ids);
@@ -88,8 +91,9 @@ class FastPaginate
     }
 
     /**
-     * @param $builder
      * @return array
+     *
+     * @throws QueryIncompatibleWithFastPagination
      */
     public static function getInnerSelectColumns($builder)
     {
@@ -112,7 +116,7 @@ class FastPaginate
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {
-                $column = $column instanceof Expression ? $column->getValue() : $base->grammar->wrap($column);
+                $column = $column instanceof Expression ? $column->getValue($base->grammar) : $base->grammar->wrap($column);
                 foreach ($orders as $order) {
                     // If we're ordering by this column, then we need to
                     // keep it in the inner query.
@@ -123,6 +127,15 @@ class FastPaginate
 
                 // Otherwise we don't.
                 return false;
+            })
+            ->each(function ($column) use ($base) {
+                if ($column instanceof Expression) {
+                    $column = $column->getValue($base->grammar);
+                }
+
+                if (str_contains($column, '?')) {
+                    throw new QueryIncompatibleWithFastPagination;
+                }
             })
             ->prepend("$table.$key")
             ->unique()
