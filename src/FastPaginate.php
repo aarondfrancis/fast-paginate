@@ -91,7 +91,6 @@ class FastPaginate
     }
 
     /**
-     * @param $builder
      * @return array
      *
      * @throws QueryIncompatibleWithFastPagination
