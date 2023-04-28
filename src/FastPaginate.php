@@ -107,12 +107,13 @@ class FastPaginate
         // the column out. Based on what orders are present, we may
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
-            ->pluck('column')
             ->map(function ($column) use ($base) {
-                // Use the grammar to wrap them, so that our `str_contains`
-                // (further down) doesn't return any false positives.
-                return $base->grammar->wrap($column);
-            });
+                if (isset($column['type']) && $column['type']=='Raw') {
+                    return $base->grammar->wrap($column['sql']);
+                }
+
+                return $base->grammar->wrap($column['column']);
+            });;
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {
