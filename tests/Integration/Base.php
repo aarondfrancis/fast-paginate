@@ -26,7 +26,9 @@ abstract class Base extends TestCase
     {
         parent::setUp();
 
-        $this->withoutDeprecationHandling();
+        if (method_exists($this, 'withoutDeprecationHandling')) {
+            $this->withoutDeprecationHandling();
+        }
 
         Schema::dropIfExists('users');
         Schema::dropIfExists('posts');
