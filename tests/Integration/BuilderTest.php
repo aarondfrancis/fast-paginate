@@ -142,6 +142,19 @@ class BuilderTest extends Base
     }
 
     /** @test */
+    public function order_by_raw_is_propagated()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->orderByRaw('id % 2')->orderBy('id')->fastPaginate(5);
+        });
+
+        $this->assertEquals(
+            'select * from `users` where `users`.`id` in (2, 4, 6, 8, 10) order by id % 2, `id` asc limit 6 offset 0',
+            $queries[2]['query']
+        );
+    }
+
+    /** @test */
     public function eager_loads_are_cleared_on_inner_query()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
