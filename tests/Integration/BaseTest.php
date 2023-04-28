@@ -26,6 +26,8 @@ abstract class BaseTest extends TestCase
     {
         parent::setUp();
 
+        $this->withoutDeprecationHandling();
+
         Schema::dropIfExists('users');
         Schema::dropIfExists('posts');
         Schema::dropIfExists('notifications');
