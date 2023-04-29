@@ -14,7 +14,7 @@ class FastPaginate
     {
         return $this->paginate('paginate', function (array $items, $paginator) {
             return $this->paginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->total(),
                 $paginator->perPage(),
                 $paginator->currentPage(),
@@ -27,7 +27,7 @@ class FastPaginate
     {
         return $this->paginate('simplePaginate', function (array $items, $paginator) {
             return $this->simplePaginator(
-                $items,
+                $this->model->newCollection($items),
                 $paginator->perPage(),
                 $paginator->currentPage(),
                 $paginator->getOptions()
@@ -53,6 +53,14 @@ class FastPaginate
             $model = $this->newModelInstance();
             $key = $model->getKeyName();
             $table = $model->getTable();
+
+            // Apparently some databases allow for offset 0 with no limit and some people
+            // use it as a hack to get all records. Since that defeats the purpose of
+            // fast pagination, we'll just return the normal paginator in that case.
+            // https://github.com/hammerstonedev/fast-paginate/issues/39
+            if ($perPage === -1) {
+                return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
+            }
 
             try {
                 $innerSelectColumns = FastPaginate::getInnerSelectColumns($this);
@@ -108,6 +116,7 @@ class FastPaginate
         // have to include certain columns in the inner query.
         $orders = collect($base->orders)
             ->pluck('column')
+            ->filter()
             ->map(function ($column) use ($base) {
                 // Use the grammar to wrap them, so that our `str_contains`
                 // (further down) doesn't return any false positives.

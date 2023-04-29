@@ -7,9 +7,11 @@ namespace Hammerstone\FastPaginate\Tests\Integration;
 
 use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
 use Hammerstone\FastPaginate\Tests\Support\User;
+use Hammerstone\FastPaginate\Tests\Support\UserCollection;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
 use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
 use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
+use Hammerstone\FastPaginate\Tests\Support\UserWithCustomCollection;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -363,6 +365,14 @@ class BuilderTest extends Base
 
         $this->assertFalse($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
+    }
+
+    /** @test */
+    public function custom_collection_is_preserved()
+    {
+        $results = UserWithCustomCollection::query()->simpleFastPaginate();
+
+        $this->assertInstanceOf(UserCollection::class, $results->getCollection());
     }
 
     /** @test */
