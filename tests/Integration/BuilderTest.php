@@ -408,4 +408,12 @@ class BuilderTest extends Base
 
         $this->assertEquals(get_class($fast), get_class($regular));
     }
+    public function test_for_union_query()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::whereRaw('id%2=0')->unionAll(User::whereRaw('id%2!=0'))->fastPaginate(2);
+        });
+        $this->assertEquals($queries[0]['query'], 'select count(*) as aggregate from ((select * from `users` where id%2=0) union all (select * from `users` where id%2!=0)) as `temp_table`');
+        $this->assertEquals($queries[1]['query'], '(select * from `users` where id%2=0) union all (select * from `users` where id%2!=0) limit 2 offset 0');
+    }
 }
