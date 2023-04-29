@@ -43,8 +43,8 @@ class FastPaginate
         ) {
             /** @var \Illuminate\Database\Query\Builder $this */
             $base = $this->getQuery();
-            // Havings and groups don't work well with this paradigm, because we are
-            // counting on each row of the inner query to return a primary key
+            // Havings, groups, and unions don't work well with this paradigm, because
+            // we are counting on each row of the inner query to return a primary key
             // that we can use. When grouping, that's not always the case.
             if (filled($base->havings) || filled($base->groups) || filled($base->unions)) {
                 return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
