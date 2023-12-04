@@ -205,6 +205,32 @@ class BuilderTest extends Base
     }
 
     /** @test */
+    public function selects_are_preserved_if_used_in_order_by()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->selectRaw('(select 1 as computed_column)')->orderBy('computed_column')->fastPaginate();
+        });
+
+        $this->assertEquals(
+            'select `users`.`id`, computed_column from `users` order by `computed_column` asc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
+    public function selects_are_preserved_if_used_in_where_constraint()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->selectRaw('(select 1 as computed_column)')->where('computed_column', 1)->fastPaginate();
+        });
+
+        $this->assertEquals(
+            'select `users`.`id`, computed_column from `users` where `computed_column` = 1 asc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
     public function havings_defer()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
