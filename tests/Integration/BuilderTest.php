@@ -212,7 +212,7 @@ class BuilderTest extends Base
         });
 
         $this->assertEquals(
-            'select `users`.`id`, computed_column from `users` order by `computed_column` asc limit 15 offset 0',
+            'select `users`.`id`, (select 1 as computed_column) from `users` order by `computed_column` asc limit 15 offset 0',
             $queries[1]['query']
         );
     }
@@ -225,7 +225,7 @@ class BuilderTest extends Base
         });
 
         $this->assertEquals(
-            'select `users`.`id`, computed_column from `users` where `computed_column` = 1 asc limit 15 offset 0',
+            'select `users`.`id`, (select 1 as computed_column) from `users` where `computed_column` = 1 asc limit 15 offset 0',
             $queries[1]['query']
         );
     }
