@@ -4,19 +4,22 @@ on:
   push:
     branches:
       - main
-
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.4, 8.0, 8.1, 8.2 ]
-        laravel: [ 8.*, 9.* , 10.*]
-        dependency-version: [ prefer-lowest, prefer-stable ]
+        php: [7.4, 8.0, 8.1, 8.2]
+        laravel: ['8.*', '9.*', '10.*', '11.*']
+        dependency-version: [prefer-lowest, prefer-stable]
         include:
           - laravel: 10.*
             testbench: 8.*
@@ -24,7 +27,8 @@ jobs:
             testbench: 6.*
           - laravel: 9.*
             testbench: 7.*
-
+          - laravel: 11.*
+            testbench: 9.*
         exclude:
           - laravel: 10.*
             php: 7.3
@@ -32,19 +36,20 @@ jobs:
             php: 7.4
           - laravel: 10.*
             php: 8.0
-            
-          # PHP 8.1 requires Laravel 8.65, so skip lowest
           - laravel: 8.*
             php: 8.1
             dependency-version: prefer-lowest
-
-          # PHP 8.2 requires Laravel 8.65, so skip lowest
           - laravel: 8.*
             php: 8.2
             dependency-version: prefer-lowest
-            
           - laravel: 9.*
             php: 7.4
+          - laravel: 11.*
+            php: 7.4
+          - laravel: 11.*
+            php: 8.0
+          - laravel: 11.*
+            php: 8.1
 
     name: P${{ matrix.php }} / L${{ matrix.laravel }} / ${{ matrix.dependency-version }}
 
