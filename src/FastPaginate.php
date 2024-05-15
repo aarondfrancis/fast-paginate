@@ -117,10 +117,16 @@ class FastPaginate
             ->pluck('column')
             ->filter()
             ->map(function ($column) use ($base) {
-                // Use the grammar to wrap them, so that our `str_contains`
-                // (further down) doesn't return any false positives.
-                return $base->grammar->wrap($column);
-            });
+                // Not everyone quotes their custom selects, which
+                // is totally reasonable. We'll look for both
+                // quoted and unquoted, as a kindness.
+                // See https://github.com/hammerstonedev/fast-paginate/pull/57
+                return [
+                    $column,
+                    $base->grammar->wrap($column)
+                ];
+            })
+            ->flatten(1);
 
         return collect($base->columns)
             ->filter(function ($column) use ($orders, $base) {
