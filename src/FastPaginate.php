@@ -127,7 +127,7 @@ class FastPaginate
                 // See https://github.com/hammerstonedev/fast-paginate/pull/57
                 return [
                     $column,
-                    $base->grammar->wrap($column)
+                    $base->grammar->wrap($column),
                 ];
             })
             ->flatten(1);
