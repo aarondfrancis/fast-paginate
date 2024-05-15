@@ -83,6 +83,10 @@ class FastPaginate
             // Get the key values from the records on the current page without mutating them.
             $ids = $paginator->getCollection()->map->getRawOriginal($key)->toArray();
 
+            if (count($ids) <= 0) {
+                return $paginator;
+            }
+
             if (in_array($model->getKeyType(), ['int', 'integer'])) {
                 $this->query->whereIntegerInRaw("$table.$key", $ids);
             } else {

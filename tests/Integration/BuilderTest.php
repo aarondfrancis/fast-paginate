@@ -122,6 +122,24 @@ class BuilderTest extends Base
     }
 
     /** @test */
+    public function not_exists_page_is_preserved()
+    {
+        $exists = User::query()->fastPaginate();
+
+        $queries = $this->withQueriesLogged(function () use (&$doesnt) {
+            $doesnt = User::query()->fastPaginate(2, ['*'], 'page', 16);
+        });
+
+        $this->assertEquals(get_class($exists), get_class($doesnt));
+
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $doesnt */
+        $this->assertEquals(0, $doesnt->count());
+        $this->assertArrayNotHasKey(2, $queries);
+
+        $this->assertFalse($doesnt->hasMorePages());
+    }
+
+    /** @test */
     public function custom_table_is_preserved()
     {
         $this->expectException(QueryException::class);
