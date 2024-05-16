@@ -239,7 +239,9 @@ class BuilderTest extends Base
     public function using_expressions_for_order_work()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {
-            $results = User::query()->selectRaw('(select 1) as computed_column')->orderBy(User::query()->select('name')->orderBy('name')->limit(1)->getQuery())->fastPaginate();
+            $results = User::query()->selectRaw('(select 1) as computed_column')->orderBy(
+                User::query()->select('name')->orderBy('name')->limit(1)->getQuery()
+            )->fastPaginate();
         });
 
         $this->assertEquals(
