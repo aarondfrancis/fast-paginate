@@ -236,6 +236,21 @@ class BuilderTest extends Base
     }
 
     /** @test */
+    public function using_expressions_for_order_work()
+    {
+        $queries = $this->withQueriesLogged(function () use (&$results) {
+            $results = User::query()->selectRaw('(select 1) as computed_column')->orderBy(
+                User::query()->select('name')->orderBy('name')->limit(1)->getQuery()
+            )->fastPaginate();
+        });
+
+        $this->assertEquals(
+            'select `users`.`id` from `users` order by (select `name` from `users` order by `name` asc limit 1) asc limit 15 offset 0',
+            $queries[1]['query']
+        );
+    }
+
+    /** @test */
     public function havings_defer()
     {
         $queries = $this->withQueriesLogged(function () use (&$results) {

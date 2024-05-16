@@ -125,6 +125,8 @@ class FastPaginate
                 // is totally reasonable. We'll look for both
                 // quoted and unquoted, as a kindness.
                 // See https://github.com/hammerstonedev/fast-paginate/pull/57
+                $column = $column instanceof Expression ? $column->getValue($base->grammar) : $column;
+
                 return [
                     $column,
                     $base->grammar->wrap($column),
