@@ -30,7 +30,7 @@ sure to test on your data!
 
 ## Installation
 
-This package supports Laravel 8, 9, and 10. (Laravel 8 must be 8.37 or higher.)
+This package supports Laravel 8, 9, 10, and 11. (Laravel 8 must be 8.37 or higher.)
 
 To install, require the package via composer:
 
