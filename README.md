@@ -83,7 +83,7 @@ This is free! If you want to support me:
 
 ## Credits
 
-Solo was developed by Aaron Francis. If you like it, please let me know!
+Fast Paginate was developed by Aaron Francis. If you like it, please let me know!
 
 - Twitter: https://twitter.com/aarondfrancis
 - Website: https://aaronfrancis.com
