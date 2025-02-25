@@ -1,0 +1,20 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "not_operator_with_successor_space": false,
+        "heredoc_to_nowdoc": false,
+        "phpdoc_summary": false,
+        "concat_space": {
+            "spacing": "one"
+        },
+        "function_declaration": {
+            "closure_fn_spacing": "none"
+        },
+        "trailing_comma_in_multiline": false
+    },
+    "xxx_header_comment": {
+        "header": "@author Aaron Francis <aaron@tryhardstudios.com>\n\n@link https://aaronfrancis.com\n@link https://x.com/aarondfrancis",
+        "comment_type": "PHPDoc",
+        "location": "after_declare_strict"
+    }
+}
