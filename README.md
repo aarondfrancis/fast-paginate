@@ -34,7 +34,7 @@ sure to test on your data!
 
 ## Installation
 
-This package supports Laravel 8, 9, 10, and 11. (Laravel 8 must be 8.37 or higher.)
+This package supports Laravel 10, 11, and 12.
 
 To install, require the package via composer:
 
@@ -56,7 +56,7 @@ User::first()->posts()->fastPaginate();
 
 ## A Favor
 
-If this helps you, please [tweet at me](https://twitter.com/aarondfrancis) with before and after times! I'd love to know :D
+If this helps you, please [tweet at me](https://twitter.com/aarondfrancis) with before and after times! Or you can open a PR! I'd love to know :D
 
 Some community results so far: 
 * [30 seconds --> 250ms](https://twitter.com/mdavis1982/status/1482429071288066054) 
