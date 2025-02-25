@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Aaron Francis <aaron@hammerstone.dev|https://twitter.com/aarondfrancis>
  */
