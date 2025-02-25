@@ -1,5 +1,9 @@
 # Fast Paginate for Laravel
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/aaronfrancis/fast-paginate)](https://packagist.org/packages/aaronfrancis/fast-paginate)
+[![Total Downloads](https://img.shields.io/packagist/dt/aaronfrancis/fast-paginate)](https://packagist.org/packages/aaronfrancis/fast-paginate)
+[![License](https://img.shields.io/packagist/l/aaronfrancis/fast-paginate)](https://packagist.org/packages/aaronfrancis/fast-paginate)
+
 ## About
 
 This is a fast `limit`/`offset` pagination macro for Laravel. It can be used in place of the standard `paginate` methods. 
@@ -35,7 +39,7 @@ This package supports Laravel 8, 9, 10, and 11. (Laravel 8 must be 8.37 or highe
 To install, require the package via composer:
 
 ```
-composer require hammerstone/fast-paginate
+composer require aaronfrancis/fast-paginate
 ```
 
 There is nothing further you need to do. The service provider will be loaded automatically by Laravel.
@@ -61,3 +65,27 @@ Some community results so far:
 * [1.1 seconds --> 0.1 seconds](https://twitter.com/max_eckel/status/1483852300414337032) 
 * [20 seconds --> 2 seconds](https://twitter.com/1ralphmorris/status/1484242437618941957) 
 * [2 seconds --> .2 seconds](https://twitter.com/julioelpoeta/status/1549524738980077568) 
+
+## License
+
+The MIT License (MIT).
+
+## Support
+
+This is free! If you want to support me:
+
+- Sponsor my open source work: [aaronfrancis.com/backstage](https://aaronfrancis.com/backstage)
+- Check out my courses:
+    - [Mastering Postgres](https://masteringpostgres.com)
+    - [High Performance SQLite](https://highperformancesqlite.com)
+    - [Screencasting](https://screencasting.com)
+- Help spread the word about things I make
+
+## Credits
+
+Solo was developed by Aaron Francis. If you like it, please let me know!
+
+- Twitter: https://twitter.com/aarondfrancis
+- Website: https://aaronfrancis.com
+- YouTube: https://youtube.com/@aarondfrancis
+- GitHub: https://github.com/aarondfrancis/solo
