@@ -4,9 +4,9 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\FastPaginate\Tests\Integration;
+namespace AaronFrancis\FastPaginate\Tests\Integration;
 
-use Hammerstone\FastPaginate\Tests\Support\User;
+use AaronFrancis\FastPaginate\Tests\Support\User;
 
 class RelationTest extends Base
 {

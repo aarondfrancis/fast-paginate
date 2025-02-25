@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @author Aaron Francis <aaron@hammerstone.dev|https://twitter.com/aarondfrancis>
+ * @author Aaron Francis <aaron@tryhardstudios.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\FastPaginate\Tests\Integration;
+namespace AaronFrancis\FastPaginate\Tests\Integration;
 
-use Hammerstone\FastPaginate\FastPaginateProvider;
+use AaronFrancis\FastPaginate\FastPaginateProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

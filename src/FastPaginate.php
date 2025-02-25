@@ -4,7 +4,7 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\FastPaginate;
+namespace AaronFrancis\FastPaginate;
 
 use Closure;
 use Illuminate\Database\Query\Expression;
@@ -58,7 +58,7 @@ class FastPaginate
             // Apparently some databases allow for offset 0 with no limit and some people
             // use it as a hack to get all records. Since that defeats the purpose of
             // fast pagination, we'll just return the normal paginator in that case.
-            // https://github.com/hammerstonedev/fast-paginate/issues/39
+            // https://github.com/aarondfrancis/fast-paginate/issues/39
             if ($perPage === -1) {
                 return $this->{$paginationMethod}($perPage, $columns, $pageName, $page);
             }
@@ -125,7 +125,7 @@ class FastPaginate
                 // Not everyone quotes their custom selects, which
                 // is totally reasonable. We'll look for both
                 // quoted and unquoted, as a kindness.
-                // See https://github.com/hammerstonedev/fast-paginate/pull/57
+                // See https://github.com/aarondfrancis/fast-paginate/pull/57
                 $column = $column instanceof Expression ? $column->getValue($base->grammar) : $column;
 
                 return [

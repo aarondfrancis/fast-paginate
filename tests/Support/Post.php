@@ -1,6 +1,6 @@
 <?php
 
-namespace Hammerstone\FastPaginate\Tests\Support;
+namespace AaronFrancis\FastPaginate\Tests\Support;
 
 use Illuminate\Database\Eloquent\Model;
 

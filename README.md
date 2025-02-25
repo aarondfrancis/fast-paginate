@@ -19,7 +19,7 @@ select * from contacts              -- The full data that you want to show your 
 ```
 
 > You might get an error trying to run the query above! Something like `This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery.`
-> In this package, we run them as [two _separate_ queries](https://github.com/hammerstonedev/fast-paginate/blob/154da286f8160a9e75e64e8025b0da682aa2ba23/src/BuilderMixin.php#L62-L79) to get around that!  
+> In this package, we run them as [two _separate_ queries](https://github.com/aarondfrancis/fast-paginate/blob/154da286f8160a9e75e64e8025b0da682aa2ba23/src/BuilderMixin.php#L62-L79) to get around that!  
 
 The benefits can vary based on your dataset, but this method allows the database to examine as little data as possible to satisfy the user's intent.
 

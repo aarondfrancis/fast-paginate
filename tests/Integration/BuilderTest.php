@@ -4,15 +4,15 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\FastPaginate\Tests\Integration;
+namespace AaronFrancis\FastPaginate\Tests\Integration;
 
-use Hammerstone\FastPaginate\Tests\Support\NotificationStringKey;
-use Hammerstone\FastPaginate\Tests\Support\User;
-use Hammerstone\FastPaginate\Tests\Support\UserCollection;
-use Hammerstone\FastPaginate\Tests\Support\UserCustomPage;
-use Hammerstone\FastPaginate\Tests\Support\UserCustomTable;
-use Hammerstone\FastPaginate\Tests\Support\UserMutatedId;
-use Hammerstone\FastPaginate\Tests\Support\UserWithCustomCollection;
+use AaronFrancis\FastPaginate\Tests\Support\NotificationStringKey;
+use AaronFrancis\FastPaginate\Tests\Support\User;
+use AaronFrancis\FastPaginate\Tests\Support\UserCollection;
+use AaronFrancis\FastPaginate\Tests\Support\UserCustomPage;
+use AaronFrancis\FastPaginate\Tests\Support\UserCustomTable;
+use AaronFrancis\FastPaginate\Tests\Support\UserMutatedId;
+use AaronFrancis\FastPaginate\Tests\Support\UserWithCustomCollection;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;

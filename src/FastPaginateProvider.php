@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @author Aaron Francis <aaron@hammerstone.dev>
+ * @author Aaron Francis <aaron@tryhardstudios.com>
  */
 
-namespace Hammerstone\FastPaginate;
+namespace AaronFrancis\FastPaginate;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;

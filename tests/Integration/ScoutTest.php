@@ -4,9 +4,9 @@
  * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
  */
 
-namespace Hammerstone\FastPaginate\Tests\Integration;
+namespace AaronFrancis\FastPaginate\Tests\Integration;
 
-use Hammerstone\FastPaginate\Tests\Support\UserScout;
+use AaronFrancis\FastPaginate\Tests\Support\UserScout;
 
 class ScoutTest extends Base
 {
