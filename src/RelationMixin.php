@@ -13,13 +13,13 @@ class RelationMixin
 {
     public function fastPaginate()
     {
-        return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
+        return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null) {
             /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
             if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
                 $this->query->addSelect($this->shouldSelect($columns));
             }
 
-            return tap($this->query->fastPaginate($perPage, $columns, $pageName, $page), function ($paginator) {
+            return tap($this->query->fastPaginate($perPage, $columns, $pageName, $page, $total), function ($paginator) {
                 if ($this instanceof BelongsToMany) {
                     $this->hydratePivotRelation($paginator->items());
                 }
