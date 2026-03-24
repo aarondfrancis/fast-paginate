@@ -7,6 +7,7 @@
 namespace AaronFrancis\FastPaginate;
 
 use Closure;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 
 class FastPaginate
@@ -57,7 +58,7 @@ class FastPaginate
             $paginationMethod,
             $paginatorOutput
         ) {
-            /** @var \Illuminate\Database\Query\Builder $this */
+            /** @var Builder $this */
             $base = $this->getQuery();
             // Havings, groups, and unions don't work well with this paradigm, because
             // we are counting on each row of the inner query to return a primary key

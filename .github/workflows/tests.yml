@@ -17,11 +17,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.2', '8.3', '8.4']
-        laravel: ['10.*', '11.*', '12.*']
+        php: [8.2, 8.3, 8.4, 8.5]
+        laravel: ['10.*', '11.*', '12.*', '13.*']
         dependency-version: [prefer-stable]
+        exclude:
+          - laravel: '13.*'
+            php: 8.2
+          - laravel: '10.*'
+            php: 8.5
 
-    name: P${{ matrix.php }} / L${{ matrix.laravel }} / ${{ matrix.dependency-version }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
     services:
       mysql:

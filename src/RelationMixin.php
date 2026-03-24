@@ -8,13 +8,14 @@ namespace AaronFrancis\FastPaginate;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class RelationMixin
 {
     public function fastPaginate()
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
-            /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
+            /** @var Relation $this */
             if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
                 $this->query->addSelect($this->shouldSelect($columns));
             }
@@ -30,7 +31,7 @@ class RelationMixin
     public function simpleFastPaginate()
     {
         return function ($perPage = null, $columns = ['*'], $pageName = 'page', $page = null) {
-            /** @var \Illuminate\Database\Eloquent\Relations\Relation $this */
+            /** @var Relation $this */
             if ($this instanceof HasManyThrough || $this instanceof BelongsToMany) {
                 $this->query->addSelect($this->shouldSelect($columns));
             }

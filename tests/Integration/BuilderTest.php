@@ -32,7 +32,7 @@ class BuilderTest extends Base
         });
 
         $this->assertInstanceOf(LengthAwarePaginator::class, $results);
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(15, $results->count());
         $this->assertEquals('Person 15', $results->last()->name);
         $this->assertCount(3, $queries);
@@ -54,7 +54,7 @@ class BuilderTest extends Base
             $results = User::query()->fastPaginate(5);
         });
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
@@ -74,7 +74,7 @@ class BuilderTest extends Base
             $results = User::query()->fastPaginate(5, ['*'], 'page', 2);
         });
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
@@ -95,7 +95,7 @@ class BuilderTest extends Base
             $results = User::query()->fastPaginate(5, ['*'], 'page', 1, 100);
         });
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         // The $total parameter was added in Laravel 11. On Laravel 10,
@@ -117,7 +117,7 @@ class BuilderTest extends Base
             $results = UserMutatedId::query()->fastPaginate(5);
         });
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(5, $results->count());
 
         $this->assertEquals(
@@ -133,7 +133,7 @@ class BuilderTest extends Base
             $results = UserCustomPage::query()->fastPaginate();
         });
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertEquals(2, $results->count());
 
         $this->assertEquals(
@@ -157,7 +157,7 @@ class BuilderTest extends Base
 
         $this->assertEquals(get_class($exists), get_class($doesnt));
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $doesnt */
+        /** @var LengthAwarePaginator $doesnt */
         $this->assertEquals(0, $doesnt->count());
         $this->assertArrayNotHasKey(2, $queries);
 
@@ -325,7 +325,7 @@ class BuilderTest extends Base
             $queries[1]['query']
         );
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $results */
+        /** @var LengthAwarePaginator $results */
         $this->assertTrue($results->hasMorePages());
         $this->assertEquals(1, $results->currentPage());
         $this->assertEquals(self::TOTAL_USERS, $results->total());
@@ -399,7 +399,7 @@ class BuilderTest extends Base
             $results = User::query()->simpleFastPaginate();
         });
 
-        /** @var \Illuminate\Pagination\Paginator $results */
+        /** @var Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(15, $results->count());
         $this->assertEquals('Person 15', $results->last()->name);
@@ -421,7 +421,7 @@ class BuilderTest extends Base
             $results = User::query()->simpleFastPaginate(5, ['*'], 'page', 2);
         });
 
-        /** @var \Illuminate\Pagination\Paginator $results */
+        /** @var Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(5, $results->count());
         $this->assertEquals('Person 10', $results->last()->name);
@@ -443,7 +443,7 @@ class BuilderTest extends Base
             $results = User::first()->posts()->simpleFastPaginate();
         });
 
-        /** @var \Illuminate\Pagination\Paginator $results */
+        /** @var Paginator $results */
         $this->assertInstanceOf(Paginator::class, $results);
         $this->assertEquals(1, $results->count());
         $this->assertEquals('Post 1', $results->last()->name);
